@@ -11,6 +11,8 @@ import com.muratkorkmazoglu.movie_app.feature.home.homeScreen
 import com.muratkorkmazoglu.movie_app.feature.home.navigateToHome
 import com.muratkorkmazoglu.movie_app.feature.splash.splashRoute
 import com.muratkorkmazoglu.movie_app.feature.splash.splashScreen
+import com.muratkorkmazoglu.movie_app.feature.video.navigateToVideo
+import com.muratkorkmazoglu.movie_app.feature.video.videoScreen
 
 @Composable
 fun MainNavHost(
@@ -32,6 +34,15 @@ fun MainNavHost(
             navController.navigateToMovieDetail(id, navOptions = NavOptions.Builder().build())
         })
         movieDetailScreen(navigateToBack = {
+            navController.navigateUp()
+        }, navigateToVideo = { title, overview ->
+            navController.navigateToVideo(
+                title,
+                overview,
+                navOptions = NavOptions.Builder().build()
+            )
+        })
+        videoScreen(navigateToBack = {
             navController.navigateUp()
         })
     }

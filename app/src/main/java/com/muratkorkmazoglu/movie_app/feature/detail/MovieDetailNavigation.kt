@@ -26,7 +26,8 @@ fun NavController.navigateToMovieDetail(id: Int, navOptions: NavOptions? = null)
 }
 
 fun NavGraphBuilder.movieDetailScreen(
-    navigateToBack: () -> Unit
+    navigateToBack: () -> Unit,
+    navigateToVideo: (String, String) -> Unit
 ) {
     composable(
         route = movieDetailRoute.plus("/{$idDataArg}"),
@@ -38,7 +39,8 @@ fun NavGraphBuilder.movieDetailScreen(
         )
     ) {
         MovieDetailRoute(
-            navigateToBack = navigateToBack
+            navigateToBack = navigateToBack,
+            navigateToVideo = navigateToVideo
         )
     }
 }

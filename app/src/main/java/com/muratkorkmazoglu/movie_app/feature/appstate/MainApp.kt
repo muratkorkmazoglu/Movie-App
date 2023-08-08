@@ -8,7 +8,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
@@ -16,6 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.muratkorkmazoglu.movie_app.R
 import com.muratkorkmazoglu.movie_app.core.util.NetworkMonitor
 import com.muratkorkmazoglu.movie_app.feature.navigation.MainNavHost
+import com.muratkorkmazoglu.movie_app.ui.theme.MoviesColors
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(
@@ -42,7 +42,7 @@ fun MainApp(
     }
     SideEffect {
         appState.systemUiController.setStatusBarColor(
-            color = Color.Blue,
+            color = MoviesColors.PrimaryBlack,
             darkIcons = false
         )
     }
