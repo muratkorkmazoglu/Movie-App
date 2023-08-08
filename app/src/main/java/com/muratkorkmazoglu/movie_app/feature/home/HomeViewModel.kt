@@ -1,7 +1,5 @@
 package com.muratkorkmazoglu.movie_app.feature.home
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -10,6 +8,9 @@ import com.muratkorkmazoglu.movie_app.arch.IViewState
 import com.muratkorkmazoglu.movie_app.core.data.model.Movie
 import com.muratkorkmazoglu.movie_app.core.domain.UseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.palm.composestateevents.StateEventWithContent
+import de.palm.composestateevents.consumed
+import de.palm.composestateevents.triggered
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
@@ -21,15 +22,6 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeViewState>() {
     override fun createInitialState(): HomeViewState = HomeViewState()
 
-    private val _topRatedMovies = mutableStateOf<Flow<PagingData<Movie>>>(emptyFlow())
-    val topRatedMovies: State<Flow<PagingData<Movie>>> = _topRatedMovies
-
-    private val _getPopularMovies = mutableStateOf<Flow<PagingData<Movie>>>(emptyFlow())
-    val popularMovies: State<Flow<PagingData<Movie>>> = _getPopularMovies
-
-    private val _getUpcomingMovies = mutableStateOf<Flow<PagingData<Movie>>>(emptyFlow())
-    val upcomingMovies: State<Flow<PagingData<Movie>>> = _getUpcomingMovies
-
     init {
         getUpComingMovies()
         getTopRatedMovies()
@@ -38,23 +30,49 @@ class HomeViewModel @Inject constructor(
 
     private fun getTopRatedMovies() {
         viewModelScope.launch {
-            _topRatedMovies.value = useCases.getTopRatedMoviesUseCase().cachedIn(viewModelScope)
+            setState {
+                copy(
+                    topRatedMovies = useCases.getTopRatedMoviesUseCase().cachedIn(viewModelScope)
+                )
+            }
         }
     }
 
     private fun getUpComingMovies() {
         viewModelScope.launch {
-            _getUpcomingMovies.value = useCases.getUpcomingMoviesUseCase().cachedIn(viewModelScope)
+            setState {
+                copy(
+                    upcomingMovies = useCases.getUpcomingMoviesUseCase().cachedIn(viewModelScope)
+                )
+            }
         }
     }
 
     private fun getPopularMovies() {
         viewModelScope.launch {
-            _getPopularMovies.value = useCases.getPopularMoviesUseCase().cachedIn(viewModelScope)
+            setState {
+                copy(
+                    popularMovies = useCases.getPopularMoviesUseCase().cachedIn(viewModelScope)
+                )
+            }
         }
+    }
+
+    fun onMovieClicked(movieId: Int?) {
+        movieId?.let { id ->
+            setState { copy(navigateToDetail = triggered(id)) }
+        }
+    }
+
+    fun onConsumeNavigateToDetailSingleEvent() {
+        setState { copy(navigateToDetail = consumed()) }
     }
 }
 
 data class HomeViewState(
-    val loading: Boolean = false,
-) : IViewState
+    val popularMovies: Flow<PagingData<Movie>> = emptyFlow(),
+    val topRatedMovies: Flow<PagingData<Movie>> = emptyFlow(),
+    val upcomingMovies: Flow<PagingData<Movie>> = emptyFlow(),
+    val navigateToDetail: StateEventWithContent<Int> = consumed(),
+
+    ) : IViewState

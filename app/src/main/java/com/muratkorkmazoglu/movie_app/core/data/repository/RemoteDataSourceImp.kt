@@ -4,10 +4,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.muratkorkmazoglu.movie_app.core.data.model.Movie
+import com.muratkorkmazoglu.movie_app.core.data.model.MovieDetailsResponse
 import com.muratkorkmazoglu.movie_app.core.data.pagingsource.PopularMoviesSource
 import com.muratkorkmazoglu.movie_app.core.data.pagingsource.TopRatedMoviesSource
 import com.muratkorkmazoglu.movie_app.core.data.pagingsource.UpcomingMoviesSource
 import com.muratkorkmazoglu.movie_app.core.data.remote.api.MoviesService
+import com.muratkorkmazoglu.movie_app.core.data.remote.getBodyOrThrowError
 import com.muratkorkmazoglu.movie_app.core.util.Constants.ITEMS_PER_PAGE
 import kotlinx.coroutines.flow.Flow
 
@@ -42,4 +44,9 @@ class RemoteDataSourceImp(
         ).flow
     }
 
+    override suspend fun getMovieDetails(id: Int): Result<MovieDetailsResponse> {
+        return kotlin.runCatching {
+            moviesService.getMovieDetails(id).getBodyOrThrowError()
+        }
+    }
 }

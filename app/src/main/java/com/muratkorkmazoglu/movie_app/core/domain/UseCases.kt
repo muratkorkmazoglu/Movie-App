@@ -5,4 +5,5 @@ class UseCases(
     val getPopularMoviesUseCase: GetPopularMoviesUseCase,
     val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
     val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
+    val getMovieDetailUseCase: GetMovieDetailUseCase,
 )

@@ -42,7 +42,8 @@ fun MainApp(
     }
     SideEffect {
         appState.systemUiController.setStatusBarColor(
-            color = Color.Transparent
+            color = Color.Blue,
+            darkIcons = false
         )
     }
 

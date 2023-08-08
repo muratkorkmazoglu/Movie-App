@@ -5,6 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
+import com.muratkorkmazoglu.movie_app.feature.detail.movieDetailScreen
+import com.muratkorkmazoglu.movie_app.feature.detail.navigateToMovieDetail
 import com.muratkorkmazoglu.movie_app.feature.home.homeScreen
 import com.muratkorkmazoglu.movie_app.feature.home.navigateToHome
 import com.muratkorkmazoglu.movie_app.feature.splash.splashRoute
@@ -26,6 +28,11 @@ fun MainNavHost(
                 NavOptions.Builder().setPopUpTo(0, true).build()
             )
         })
-        homeScreen()
+        homeScreen(navigateToDetail = { id ->
+            navController.navigateToMovieDetail(id, navOptions = NavOptions.Builder().build())
+        })
+        movieDetailScreen(navigateToBack = {
+            navController.navigateUp()
+        })
     }
 }

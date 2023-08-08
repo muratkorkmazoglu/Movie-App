@@ -11,6 +11,7 @@ import com.muratkorkmazoglu.movie_app.core.data.remote.api.MoviesService
 import com.muratkorkmazoglu.movie_app.core.data.repository.MovieRepository
 import com.muratkorkmazoglu.movie_app.core.data.repository.RemoteDataSource
 import com.muratkorkmazoglu.movie_app.core.data.repository.RemoteDataSourceImp
+import com.muratkorkmazoglu.movie_app.core.domain.GetMovieDetailUseCase
 import com.muratkorkmazoglu.movie_app.core.domain.GetPopularMoviesUseCase
 import com.muratkorkmazoglu.movie_app.core.domain.GetTopRatedMoviesUseCase
 import com.muratkorkmazoglu.movie_app.core.domain.GetUpcomingMoviesUseCase
@@ -125,7 +126,7 @@ object RemoteDataModule {
             getPopularMoviesUseCase = GetPopularMoviesUseCase(repository),
             getTopRatedMoviesUseCase = GetTopRatedMoviesUseCase(repository),
             getUpcomingMoviesUseCase = GetUpcomingMoviesUseCase(repository),
-
+            getMovieDetailUseCase = GetMovieDetailUseCase(repository)
             )
     }
 }
