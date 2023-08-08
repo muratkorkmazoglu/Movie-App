@@ -28,6 +28,7 @@ hiltNavigationCompose = "1.0.0"
 composeLintChecks = "1.0.1"
 composeStateEvents = "1.2.3"
 orgJacocoCore = "0.8.7"
+pagingCompose = "1.0.0-alpha14"
 playServicesAuth = "20.5.0"
 playServicesAuthApiPhone = "18.0.1"
 runtimeLivedata = "1.5.0-beta01"
@@ -48,6 +49,7 @@ exoPlayer = "2.19.0"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintLayout" }
 
 exoplayer = { module = "com.google.android.exoplayer:exoplayer", version.ref = "exoPlayer" }

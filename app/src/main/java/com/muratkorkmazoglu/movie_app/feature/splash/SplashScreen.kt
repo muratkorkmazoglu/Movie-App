@@ -11,11 +11,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.muratkorkmazoglu.movie_app.R
 import com.muratkorkmazoglu.movie_app.ui.component.ErrorDialog
 import com.muratkorkmazoglu.movie_app.ui.theme.MoviesColors
 import de.palm.composestateevents.EventEffect
@@ -65,8 +67,8 @@ private fun Content(
     ) {
         if (uiState.hasConnectionError)
             ErrorDialog(
-                title = "Bağlantı Problemi",
-                description = "İnternet bağlantınla ilgili bir sorun algıladık. Lütfen ayarlarını kontrol et.",
+                title = stringResource(id = R.string.not_network_connected_title),
+                description = stringResource(id = R.string.not_network_connected),
                 onDismissRequest = {},
                 onButtonClick = onCLickRetry
             )
@@ -81,7 +83,7 @@ fun SplashLottieAnimation(
     modifier: Modifier = Modifier,
     lottieModifier: Modifier = Modifier,
 ) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(com.muratkorkmazoglu.movie_app.R.raw.splash_lottie))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.splash_lottie))
     Box(
         modifier = modifier
             .fillMaxSize(),

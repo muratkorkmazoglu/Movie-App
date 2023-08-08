@@ -7,20 +7,23 @@ import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
 import com.muratkorkmazoglu.movie_app.BuildConfig
-import com.muratkorkmazoglu.movie_app.core.data.local.datastore.DataStoreManager
 import com.muratkorkmazoglu.movie_app.core.data.remote.api.MoviesService
+import com.muratkorkmazoglu.movie_app.core.data.repository.MovieRepository
+import com.muratkorkmazoglu.movie_app.core.data.repository.RemoteDataSource
+import com.muratkorkmazoglu.movie_app.core.data.repository.RemoteDataSourceImp
+import com.muratkorkmazoglu.movie_app.core.domain.GetPopularMoviesUseCase
+import com.muratkorkmazoglu.movie_app.core.domain.GetTopRatedMoviesUseCase
+import com.muratkorkmazoglu.movie_app.core.domain.GetUpcomingMoviesUseCase
+import com.muratkorkmazoglu.movie_app.core.domain.UseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
@@ -42,13 +45,11 @@ object RemoteDataModule {
     fun provideOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         chuckInterceptor: ChuckerInterceptor,
-        authInterceptor: AuthInterceptor,
 
         ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(chuckInterceptor)
-            .addInterceptor(authInterceptor)
             .build()
     }
 
@@ -93,10 +94,6 @@ object RemoteDataModule {
         return GsonConverterFactory.create()
     }
 
-    @Singleton
-    @Provides
-    fun provideAuthInterceptor(dataStoreManager: DataStoreManager): AuthInterceptor =
-        AuthInterceptor(dataStoreManager = dataStoreManager)
 
     @Provides
     @Singleton
@@ -110,16 +107,25 @@ object RemoteDataModule {
                 .build()
         }
     }
-}
 
-class AuthInterceptor @Inject constructor(private val dataStoreManager: DataStoreManager) :
-    Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val token = ""
-        val requestBuilder = chain.request().newBuilder()
+    @Provides
+    @Singleton
+    fun providesRemoteDataSource(
+        moviesService: MoviesService,
+    ): RemoteDataSource {
+        return RemoteDataSourceImp(
+            moviesService = moviesService
+        )
+    }
 
-        requestBuilder.addHeader("Content-Type", "application/json")
-        if (token.isEmpty().not()) requestBuilder.addHeader("Authorization", "Bearer $token")
-        return chain.proceed(requestBuilder.build())
+    @Provides
+    @Singleton
+    fun providesUseCases(repository: MovieRepository): UseCases {
+        return UseCases(
+            getPopularMoviesUseCase = GetPopularMoviesUseCase(repository),
+            getTopRatedMoviesUseCase = GetTopRatedMoviesUseCase(repository),
+            getUpcomingMoviesUseCase = GetUpcomingMoviesUseCase(repository),
+
+            )
     }
 }

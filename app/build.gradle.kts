@@ -55,7 +55,8 @@ android {
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
             resValue("string", "app_name", "Movies Dev")
-            buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/discover/\"")
+            buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
+            buildConfigField("String", "API_KEY", "\"1bbc6426551defae32aa6d680e28581a\"")
 
         }
         create("prod") {
@@ -63,7 +64,8 @@ android {
             applicationIdSuffix = ".prod"
             versionNameSuffix = "-prod"
             resValue("string", "app_name", "Movies")
-            buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/discover/\"")
+            buildConfigField("String", "BASE_URL", "\"https://api.themoviedb.org/3/\"")
+            buildConfigField("String", "API_KEY", "\"1bbc6426551defae32aa6d680e28581a\"")
 
         }
     }
@@ -95,6 +97,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.material)
+    implementation(libs.androidx.paging.compose)
 
     implementation(libs.androidx.compose.material3)
 
@@ -172,10 +175,5 @@ dependencies {
     implementation(libs.compressor)
     implementation(libs.coil.compose)
 
-    // CameraX
-    implementation(libs.androidx.camera.camera2)
-    implementation(libs.androidx.camera.lifecycle)
-    implementation(libs.androidx.camera.view)
-    implementation(libs.androidx.camera.extensions)
 
 }

@@ -36,7 +36,7 @@ class SplashViewModel @Inject constructor(
 
     private fun checkSession() {
         viewModelScope.launch {
-            delay(1500)
+            delay(2500)
             setState {
                 copy(
                     navigateToHome = triggered,

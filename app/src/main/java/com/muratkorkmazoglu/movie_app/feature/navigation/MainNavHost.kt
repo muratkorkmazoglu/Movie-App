@@ -3,7 +3,10 @@ package com.muratkorkmazoglu.movie_app.feature.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
+import com.muratkorkmazoglu.movie_app.feature.home.homeScreen
+import com.muratkorkmazoglu.movie_app.feature.home.navigateToHome
 import com.muratkorkmazoglu.movie_app.feature.splash.splashRoute
 import com.muratkorkmazoglu.movie_app.feature.splash.splashScreen
 
@@ -18,24 +21,11 @@ fun MainNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
-        splashScreen {
-
-        }
-        /*  splashScreen(navigateToLogin = {
-              navController.navigateLoginScreen(
-                  NavOptions.Builder().setPopUpTo(0, true).build()
-              )
-          }, navigateToHome = {
-              navController.navigateHomeScreen(
-                  NavOptions.Builder().setPopUpTo(0, true).build()
-              )
-          }, navigateToLanding = {
-              navController.navigateToLanding(
-                  NavOptions.Builder().setPopUpTo(0, true).build()
-              )
-          })
-          homeScreen(navigateToNotifications = {
-              navController.navigateToNotification()
-          })*/
+        splashScreen(navigateToHome = {
+            navController.navigateToHome(
+                NavOptions.Builder().setPopUpTo(0, true).build()
+            )
+        })
+        homeScreen()
     }
 }
