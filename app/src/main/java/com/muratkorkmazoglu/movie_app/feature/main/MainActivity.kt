@@ -1,9 +1,12 @@
+@file:OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+
 package com.muratkorkmazoglu.movie_app.feature.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -41,7 +44,6 @@ class MainActivity : ComponentActivity() {
                     .collect()
             }
         }
-
         WindowCompat.setDecorFitsSystemWindows(window, true)
         setContent()
     }

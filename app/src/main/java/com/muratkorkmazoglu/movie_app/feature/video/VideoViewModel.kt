@@ -20,10 +20,11 @@ class VideoViewModel @Inject constructor(
     }
 
 
+
 }
 
 data class VideoViewState(
     val loading: Boolean = false,
     val title: String = "",
-    val overview: String = ""
+    val overview: String = "",
 ) : IViewState
