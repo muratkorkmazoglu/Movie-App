@@ -54,7 +54,7 @@ fun MainApp(
         backgroundColor = MaterialTheme.colors.background,
     ) {
         MainNavHost(
-            navController = appState.navController,
+            navController = appState.navController
         )
     }
 }

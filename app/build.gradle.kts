@@ -90,6 +90,7 @@ android {
 }
 
 dependencies {
+
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     androidTestImplementation(composeBom)
@@ -107,9 +108,6 @@ dependencies {
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtimeCompose)
-
-    //Splash
-    implementation(libs.androidx.core.splashscreen)
 
     //Hilt
     implementation(libs.hilt.android)
@@ -131,49 +129,21 @@ dependencies {
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
 
-
-    testImplementation(libs.turbine)
-    testImplementation(libs.truth)
-
-    // To use the androidx.test.core APIs
-    androidTestImplementation(libs.androidx.test.core)
-    // Kotlin extensions for androidx.test.core
-    androidTestImplementation(libs.androidx.test.ktx)
-
-    // To use the JUnit Extension APIs
-    testImplementation(libs.androidx.test.ext)
-    // Kotlin extensions for androidx.test.ext.junit
-    testImplementation(libs.androidx.test.ext.ktx)
-
-    // To use the Truth Extension APIs
-    testImplementation(libs.truth.ext)
-    testImplementation(libs.jetbrains.kotlin.test)
     implementation(libs.androidx.navigation.testing)
-    testImplementation(libs.junit4)
-    androidTestImplementation(libs.androidx.test.ext)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.androidx.compose.ui.test)
 
     implementation(libs.dataStore)
     implementation(libs.dataStore.preferences)
 
-    implementation(libs.libphonenumber.android)
     implementation(libs.lottie.compose)
-    implementation(libs.androidx.runtime.livedata)
-
-    implementation(libs.play.services.auth.api.phone)
-    implementation(libs.play.services.auth)
-
-    implementation(libs.accompanist.permissions)
-    implementation(libs.accompanist.pager)
     implementation(libs.accompanist.systemuicontroller)
-
-    //Constraint Layout
-    implementation(libs.constraintlayout)
 
     // Compression image
     implementation(libs.compressor)
     implementation(libs.coil.compose)
 
+    //exoplayer
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.exoplayer.dash)
+    implementation(libs.androidx.media3.ui)
 
 }
