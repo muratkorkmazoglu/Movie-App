@@ -9,8 +9,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,6 +49,8 @@ import coil.request.ImageRequest
 import com.muratkorkmazoglu.movie_app.R
 import com.muratkorkmazoglu.movie_app.core.data.model.Movie
 import com.muratkorkmazoglu.movie_app.core.util.Constants.IMAGE_BASE_URL
+import com.muratkorkmazoglu.movie_app.feature.detail.MovieDetailViewModel
+import com.muratkorkmazoglu.movie_app.feature.detail.MovieDetailViewState
 import com.muratkorkmazoglu.movie_app.ui.component.ErrorDialog
 import com.muratkorkmazoglu.movie_app.ui.component.TopAppBar
 import com.muratkorkmazoglu.movie_app.ui.theme.MoviesColors
@@ -54,12 +58,30 @@ import de.palm.composestateevents.EventEffect
 import retrofit2.HttpException
 import java.io.IOException
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun HomeRoute(
+    navigateToDetail: (Int) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToDetail: (Int) -> Unit
+    movieDetailViewModel: MovieDetailViewModel = hiltViewModel(),
+    navigateToVideo: (String, String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val movieDetailState by movieDetailViewModel.uiState.collectAsState()
+    val activity = LocalContext.current as Activity
+    val windowSizeClass = calculateWindowSizeClass(activity)
+
+    when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> viewModel.isTablet(false)
+        else -> viewModel.isTablet(true)
+    }
+
+    EventEffect(
+        event = uiState.navigateToVideo,
+        onConsumed = viewModel::onConsumeNavigateToVideoSingleEvent
+    ) {
+        navigateToVideo(it.first, it.second)
+    }
 
     EventEffect(
         event = uiState.navigateToDetail,
@@ -70,20 +92,39 @@ fun HomeRoute(
 
     HomeScreen(
         uiState = uiState,
-        onMovieClicked = viewModel::onMovieClicked
+        movieDetailUiState = movieDetailState,
+        onMovieClicked = {
+            if (uiState.isTablet) {
+                movieDetailViewModel.getMovie(it)
+            } else viewModel.onMovieClicked(it)
+        },
+        onPlayVideoClicked = {
+            viewModel.onPlayVideoClicked(
+                movieDetailState.title.orEmpty(),
+                movieDetailState.overview.orEmpty()
+            )
+        }
     )
 }
 
 @Composable
 fun HomeScreen(
     uiState: HomeViewState,
+    movieDetailUiState: MovieDetailViewState,
+    onPlayVideoClicked: () -> Unit,
     modifier: Modifier = Modifier,
     onMovieClicked: (Int) -> Unit
 ) {
     Scaffold(containerColor = MoviesColors.PrimaryBlack, topBar = {
         TopAppBar(title = "Movies", navigateToBack = {})
     }) {
-        Content(uiState, modifier = modifier.padding(it), onMovieClicked = onMovieClicked)
+        Content(
+            uiState,
+            modifier = modifier.padding(it),
+            onMovieClicked = onMovieClicked,
+            movieDetailUiState = movieDetailUiState,
+            onPlayVideoClicked = onPlayVideoClicked
+        )
     }
 }
 
@@ -91,54 +132,53 @@ fun HomeScreen(
 @Composable
 fun Content(
     uiState: HomeViewState,
+    movieDetailUiState: MovieDetailViewState,
+    onPlayVideoClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    onMovieClicked: (Int) -> Unit
+    onMovieClicked: (Int) -> Unit,
 ) {
-    val activity = LocalContext.current as Activity
-    val windowSizeClass = calculateWindowSizeClass(activity)
-
     val topRatedMovies = uiState.topRatedMovies.collectAsLazyPagingItems()
     val popularMovies = uiState.popularMovies.collectAsLazyPagingItems()
     val upcomingMovies = uiState.upcomingMovies.collectAsLazyPagingItems()
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth(fraction = 0.5f)
-            .fillMaxHeight()
-            .padding(horizontal = 16.dp)
-    ) {
-        item {
-            when (windowSizeClass.widthSizeClass) {
-                WindowWidthSizeClass.Compact -> {
-                    Text(text = "CompactUI()")
-                }
-
-                else -> {
-                    Text(text = "ExpandedUI()")
-                }
+    Row(modifier = modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth(fraction = if (uiState.isTablet) 0.5f else 1f)
+                .fillMaxHeight()
+                .padding(horizontal = 16.dp)
+        ) {
+            item {
+                HorizontalMovieList(
+                    topRatedMovies,
+                    title = stringResource(R.string.top_rated),
+                    onMovieClicked = onMovieClicked
+                )
+            }
+            item {
+                HorizontalMovieList(
+                    popularMovies,
+                    title = stringResource(R.string.popular),
+                    onMovieClicked = onMovieClicked
+                )
+            }
+            item {
+                HorizontalMovieList(
+                    upcomingMovies,
+                    title = stringResource(R.string.upcoming),
+                    onMovieClicked = onMovieClicked
+                )
             }
         }
-        item {
-            HorizontalMovieList(
-                topRatedMovies,
-                title = stringResource(R.string.top_rated),
-                onMovieClicked = onMovieClicked
-            )
-        }
-        item {
-            HorizontalMovieList(
-                popularMovies,
-                title = stringResource(R.string.popular),
-                onMovieClicked = onMovieClicked
-            )
-        }
-        item {
-            HorizontalMovieList(
-                upcomingMovies,
-                title = stringResource(R.string.upcoming),
-                onMovieClicked = onMovieClicked
-            )
-        }
+        if (uiState.isTablet)
+            com.muratkorkmazoglu.movie_app.feature.detail.Content(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 36.dp),
+                uiState = movieDetailUiState,
+                onPlayVideoClicked = onPlayVideoClicked,
+                navigateToBack = {})
     }
+
 }
 
 

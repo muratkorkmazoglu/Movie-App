@@ -67,6 +67,27 @@ class HomeViewModel @Inject constructor(
     fun onConsumeNavigateToDetailSingleEvent() {
         setState { copy(navigateToDetail = consumed()) }
     }
+
+    fun isTablet(isTablet: Boolean) {
+        setState { copy(isTablet = isTablet) }
+    }
+
+    fun onPlayVideoClicked(title: String, overview: String) {
+        setState {
+            copy(
+                navigateToVideo = triggered(
+                    Pair(
+                        title,
+                        overview
+                    )
+                )
+            )
+        }
+    }
+
+    fun onConsumeNavigateToVideoSingleEvent() {
+        setState { copy(navigateToVideo = consumed()) }
+    }
 }
 
 data class HomeViewState(
@@ -74,5 +95,6 @@ data class HomeViewState(
     val topRatedMovies: Flow<PagingData<Movie>> = emptyFlow(),
     val upcomingMovies: Flow<PagingData<Movie>> = emptyFlow(),
     val navigateToDetail: StateEventWithContent<Int> = consumed(),
-
-    ) : IViewState
+    val navigateToVideo: StateEventWithContent<Pair<String, String>> = consumed(),
+    val isTablet: Boolean = false
+) : IViewState

@@ -4,9 +4,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("kotlin-kapt")
     id("kotlin-parcelize")
-
 }
-
 
 android {
     namespace = "com.muratkorkmazoglu.movie_app"

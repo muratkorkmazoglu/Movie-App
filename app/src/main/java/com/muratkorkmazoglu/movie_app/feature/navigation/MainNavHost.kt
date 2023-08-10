@@ -32,7 +32,14 @@ fun MainNavHost(
         })
         homeScreen(navigateToDetail = { id ->
             navController.navigateToMovieDetail(id, navOptions = NavOptions.Builder().build())
-        })
+        },
+            navigateToVideo = { title, overview ->
+                navController.navigateToVideo(
+                    title,
+                    overview,
+                    navOptions = NavOptions.Builder().build()
+                )
+            })
         movieDetailScreen(navigateToBack = {
             navController.navigateUp()
         }, navigateToVideo = { title, overview ->

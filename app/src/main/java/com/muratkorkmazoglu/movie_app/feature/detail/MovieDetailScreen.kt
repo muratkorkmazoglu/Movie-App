@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+
 package com.muratkorkmazoglu.movie_app.feature.detail
 
+import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +30,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -52,6 +58,13 @@ fun MovieDetailRoute(
     navigateToVideo: (String, String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val activity = LocalContext.current as Activity
+    val windowSizeClass = calculateWindowSizeClass(activity)
+
+    when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> viewModel.isTablet(false)
+        else -> viewModel.isTablet(true)
+    }
 
     EventEffect(
         event = uiState.navigateToVideo,
@@ -89,6 +102,12 @@ fun Content(
     modifier: Modifier = Modifier,
     navigateToBack: () -> Unit
 ) {
+    val activity = LocalContext.current as Activity
+    val windowSizeClass = calculateWindowSizeClass(activity)
+    val isTablet = when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> false
+        else -> true
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -104,7 +123,7 @@ fun Content(
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp)
+                    .height(if (isTablet) 400.dp else 300.dp)
                     .background(MoviesColors.PrimaryBlack),
                 painter = rememberAsyncImagePainter(
                     ImageRequest.Builder(LocalContext.current).data(data = uiState.posterUrl)
@@ -116,14 +135,16 @@ fun Content(
                 contentScale = ContentScale.FillHeight,
                 contentDescription = "",
             )
-            IconButton(
-                onClick = navigateToBack,
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(top = 28.dp, start = 16.dp)
-            ) {
-                Icon(Icons.Filled.ArrowBack, null, tint = Color.White)
-            }
+
+            if (isTablet.not())
+                IconButton(
+                    onClick = navigateToBack,
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(top = 28.dp, start = 16.dp)
+                ) {
+                    Icon(Icons.Filled.ArrowBack, null, tint = Color.White)
+                }
             Text(
                 text = uiState.releaseDate.orEmpty(),
                 style = MaterialTheme.typography.bodyMedium,
@@ -160,7 +181,8 @@ fun Content(
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
-        PlayButton(onPlayVideoClicked = onPlayVideoClicked)
+        if (uiState.title.isNullOrEmpty().not())
+            PlayButton(onPlayVideoClicked = onPlayVideoClicked)
     }
 }
 

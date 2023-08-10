@@ -12,13 +12,15 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.homeScreen(
-    navigateToDetail: (Int) -> Unit
+    navigateToDetail: (Int) -> Unit,
+    navigateToVideo: (String, String) -> Unit,
 ) {
     composable(
         route = homeRoute,
     ) {
         HomeRoute(
-            navigateToDetail = navigateToDetail
+            navigateToDetail = navigateToDetail,
+            navigateToVideo = navigateToVideo
         )
     }
 }

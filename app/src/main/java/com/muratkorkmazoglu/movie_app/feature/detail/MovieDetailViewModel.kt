@@ -33,10 +33,12 @@ class MovieDetailViewModel @Inject constructor(
     private val detailArgs = MovieDetailArgs(savedStateHandle)
 
     init {
-        getMovie(detailArgs.id)
+        detailArgs.id?.let {
+            getMovie(it)
+        }
     }
 
-    private fun getMovie(movieId: Int) {
+    fun getMovie(movieId: Int) {
         viewModelScope.launch {
             useCases.getMovieDetailUseCase.invoke(movieId).asResource().onEach {
                 when (it) {
@@ -89,6 +91,10 @@ class MovieDetailViewModel @Inject constructor(
     fun onConsumeNavigateToVideoSingleEvent() {
         setState { copy(navigateToVideo = consumed()) }
     }
+
+    fun isTablet(isTablet: Boolean) {
+        setState { copy(isTablet = isTablet) }
+    }
 }
 
 data class MovieDetailViewState(
@@ -100,4 +106,5 @@ data class MovieDetailViewState(
     val title: String? = "",
     val genres: List<Genres>? = listOf(),
     val navigateToVideo: StateEventWithContent<Pair<String?, String?>> = consumed(),
+    val isTablet: Boolean = false
 ) : IViewState

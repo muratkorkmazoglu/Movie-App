@@ -12,12 +12,12 @@ const val movieDetailRoute = "movieDetail_route"
 const val idDataArg = "idArg"
 
 internal class MovieDetailArgs(
-    val id: Int
+    val id: Int?
 ) {
     constructor(
         savedStateHandle: SavedStateHandle
     ) : this(
-        id = checkNotNull(savedStateHandle[idDataArg]),
+        id = (savedStateHandle[idDataArg]),
     )
 }
 
