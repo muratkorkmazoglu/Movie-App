@@ -18,11 +18,11 @@
 ## 🌚 Screenshots
 |   Movies Screen    |  Movie Detail Screen    |   Video Screen   |  Video Full Screen |
 |---	|---	|---    |---   
-| <img src="https://github.com/muratkorkmazoglu/Movie-App/assets/25737043/faf4f715-bcab-42fa-b76b-d720766e9883"> | <img src="https://github.com/muratkorkmazoglu/Movie-App/assets/25737043/726e4a9d-3d1d-42b3-ad58-e97a2e2c241f"> |  <img src="https://github.com/muratkorkmazoglu/Movie-App/assets/25737043/aa6b4171-9678-4643-9439-0add5ae047b8" > | <img src="https://github.com/muratkorkmazoglu/Movie-App/assets/25737043/f26bcc84-90e3-45e1-b43b-50aa8ebb6fe0" > 
+| <img src="https://i.imgur.com/Hm4LU0B.jpg"> | <img src="https://i.imgur.com/o54dEYh.png"> |  <img src="https://i.imgur.com/wcJM9hX.png" > | <img src="https://i.imgur.com/qobL2UE.jpg" > 
 
 |    Tablet View    | 
 |---	
-| <img src="https://github.com/muratkorkmazoglu/Movie-App/assets/25737043/14133d83-01aa-4dc6-9279-c9256cb31b8a" width="500" height="1000"> |  
+| <img src="https://i.imgur.com/2TbAdes.png" width="500" height="1000"> |  
 
 ## 🛠 Built With
 - Kotlin
