@@ -1,6 +1,5 @@
 package com.muratkorkmazoglu.movie_app.feature.detail
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -60,7 +59,6 @@ class MovieDetailViewModel @Inject constructor(
                             }
 
                         }
-                        Log.d("RESPONSEEE", it.data.originalTitle.toString())
                     }
 
                     is Resource.Error -> {
